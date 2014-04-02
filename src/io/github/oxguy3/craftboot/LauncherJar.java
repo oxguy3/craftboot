@@ -1,6 +1,9 @@
 package io.github.oxguy3.craftboot;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,10 +55,29 @@ public class LauncherJar {
 		newFileName = newFileName.substring(0, newFileName.length() - PACKED_EXT.length())
 				+ UNPACKED_EXT;
 		File unpackedFile = new File(file.getParentFile(), newFileName);
-		JarOutputStream jarOut;
+
+		FileInputStream fis;
+		BufferedInputStream bis;
+		FileOutputStream fos;
+		BufferedOutputStream bos;
+		JarOutputStream jos;
+		
 		try {
-			jarOut = new JarOutputStream(new FileOutputStream(unpackedFile));
-			unpacker.unpack(file, jarOut);
+			fis = new FileInputStream(file);
+			bis = new BufferedInputStream(fis);
+			
+			fos = new FileOutputStream(unpackedFile);
+			bos = new BufferedOutputStream(fos);
+			jos = new JarOutputStream(bos);
+			
+			unpacker.unpack(bis, jos);
+
+			jos.close();
+			bos.close();
+			fos.close();
+			bis.close();
+			fis.close();
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
