@@ -131,7 +131,7 @@ public class Craftboot {
 	 */
 	public static void prepareUserUrl() {
 		File launcherProperties = new File(dataDir, "launcher.properties");
-		File craftbootUrl = new File(dataDir, "craftbooturl");
+		File craftbootUrl = new File(dataDir, ".craftbooturl");
 		String propertiesUrl = "";
 		
 		// get the properties URL from the file if it exists
