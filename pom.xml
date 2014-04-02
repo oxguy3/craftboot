@@ -1,19 +1,68 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>craftboot</groupId>
+  <groupId>io.github.oxguy3</groupId>
   <artifactId>craftboot</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Craftboot</name>
   <description>An attempt to make an open bootstrapper for SKCraft Launcher</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
-    <plugins>
+    <!--<plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.0</version>
         <configuration>
           <source/>
           <target/>
+        </configuration>
+      </plugin>
+    </plugins>-->
+        <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <archive>
+            <addMavenDescriptor>false</addMavenDescriptor>
+            <manifest>
+              <mainClass>io.github.oxguy3.craftboot.Craftboot</mainClass>
+            </manifest>
+            <manifestEntries>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <excludes>
+                  <exclude>org.projectlombok:lombok</exclude>
+                </excludes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <minimizeJar>false</minimizeJar>
         </configuration>
       </plugin>
     </plugins>

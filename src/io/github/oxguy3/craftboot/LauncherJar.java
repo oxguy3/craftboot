@@ -8,7 +8,6 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
 import lombok.Getter;
-import lombok.Setter;
 
 public class LauncherJar {
 
@@ -79,17 +78,18 @@ public class LauncherJar {
 		
 		boolean packed;
 		
-		// check that the file extension is correct
+		// check that the file extension is correct, then remove it
 		if (name.endsWith(PACKED_EXT)) {
 			packed = true;
+			name = name.substring(0, name.length() - PACKED_EXT.length());
+			
 		} else if (name.endsWith(UNPACKED_EXT)) {
 			packed = false;
+			name = name.substring(0, name.length() - UNPACKED_EXT.length());
+			
 		} else {
 			return null;
 		}
-		
-		// remove the file extension
-		name = name.substring(0, name.length() - PACKED_EXT.length());
 		
 		// check that the file name is a legitimate timestamp
 		try {
