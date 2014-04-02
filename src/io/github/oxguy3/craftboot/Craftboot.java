@@ -1,7 +1,10 @@
 package io.github.oxguy3.craftboot;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -128,17 +131,45 @@ public class Craftboot {
 	 */
 	public static void prepareUserUrl() {
 		File launcherProperties = new File(dataDir, "launcher.properties");
-		if (!launcherProperties.exists()) {
-			String propertiesUrl = JOptionPane.showInputDialog("Please enter the launcher configuration URL.\n(Seen this message before? Make sure you haven't renamed your launcher file.)");
+		File craftbootUrl = new File(dataDir, "craftbooturl");
+		String propertiesUrl = "";
+		
+		// get the properties URL from the file if it exists
+		if (craftbootUrl.exists()) {
+			propertiesUrl = CraftbootUtils.getTextFromFile(craftbootUrl);
+			if (propertiesUrl == null) {
+				log.warning("Could not read URL from file, will prompt user to re-enter URL");
+			}
+		}
+		
+		// if the launcher.properties file doesn't or properties URL file didn't exist, prompt
+		// the user for a launcher.properties URL
+		if (!launcherProperties.exists() || propertiesUrl == null) {
+			propertiesUrl = (propertiesUrl == null) ? "" : propertiesUrl;
+			while (propertiesUrl == "") {
+				propertiesUrl = JOptionPane.showInputDialog("Please enter the launcher configuration URL.\n(Seen this message before? Make sure you haven't renamed your launcher file.)");
+			}
 			if (propertiesUrl == null) {
 				log.info("User canceled setup, shutting down...");
 				System.exit(0);
 				return;
 			}
-			if (!CraftbootUtils.downloadToFile(propertiesUrl, launcherProperties)) {
-				log.warning("Failed to download launcher.properties, default version will likely be used");
+			
+			// save the url to a file
+			PrintStream out;
+			try {
+				out = new PrintStream(new FileOutputStream(new File(dataDir, "craftbooturl")));
+				out.print(propertiesUrl);
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
+		
+		if (!CraftbootUtils.downloadToFile(propertiesUrl, launcherProperties)) {
+			log.warning("Failed to download launcher.properties, default version will likely be used");
+		}
+		
 		if (launcherProperties.exists()) {
 			try {
 				System.setProperty("com.skcraft.launcher.propertiesFile", launcherProperties.getCanonicalPath());

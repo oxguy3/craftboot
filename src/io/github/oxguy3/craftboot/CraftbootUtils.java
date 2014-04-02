@@ -2,6 +2,7 @@ package io.github.oxguy3.craftboot;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,6 +30,23 @@ public class CraftbootUtils {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Downloads text from a given URL and returns it as a String
+	 * 
+	 * @return the text (or null if download failed)
+	 */
+	public static String getTextFromFile(File file) {
+		InputStream in;
+		try {
+			in = new FileInputStream(file);
+			Scanner scan = new Scanner(in);
+			return scan.hasNext() ? scan.next() : null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
