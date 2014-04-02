@@ -1,6 +1,6 @@
 # CraftBoot
 
-[Wiki](//github.com/oxguy3/craftboot/wiki) ~ [Downloads](//github.com/oxguy3/craftboot/releases)
+[Wiki](//github.com/oxguy3/craftboot/wiki) &bull; [Downloads](//github.com/oxguy3/craftboot/releases) | [launcher](//github.com/oxguy3/craftboot-launcher) &bull; [files](//github.com/oxguy3/craftboot-files)
 
 CraftBoot is a bootstrapper for [SKCraft Launcher](https://github.com/skcraft/launcher), an open source launcher for Minecraft modpacks. CraftBoot allows modpack makers to easily distribute updates for their modpacks using the powerful tools provided by SKCraft Launcher, but without having to know Java or open an IDE.
 
