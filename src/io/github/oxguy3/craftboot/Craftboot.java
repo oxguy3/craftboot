@@ -1,7 +1,6 @@
 package io.github.oxguy3.craftboot;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -16,9 +15,17 @@ import lombok.extern.java.Log;
 public class Craftboot {
 	
 	@Getter private static File dataDir;
+
+	public static final String PACKED_EXT = ".jar.pack";
+	public static final String UNPACKED_EXT = ".jar";
+	static final String LAUNCHER_CLASS_NAME = "com.skcraft.launcher.Launcher";
+	static final String LAUNCHER_SUBDIR = ".craftboot";
 	
-	public static final String LAUNCHER_CLASS_NAME = "com.skcraft.launcher.Launcher";
-	
+	/**
+	 * Does most of the everything
+	 * 
+	 * @param args arguments (not used)
+	 */
 	public static void main(String[] args) {
 		dataDir = makeDataDir();
 		File launcherDir = new File(dataDir, "launcher");
@@ -28,6 +35,14 @@ public class Craftboot {
 		}
 		
 		File[] launcherPacks = launcherDir.listFiles();
+		if (launcherPacks.length == 0) {
+			boolean didDownload = new LauncherDownloader().downloadLauncher();
+			if (!didDownload) {
+				log.severe("Failed to download launcher! Shutting down...");
+				System.exit(1);
+			}
+			launcherPacks = launcherDir.listFiles();
+		}
 		ArrayList<LauncherJar> launcherPackFiles = new ArrayList<LauncherJar>(launcherPacks.length);
 		
 		for (int i = 0; i < launcherPacks.length; i++) {
@@ -70,16 +85,12 @@ public class Craftboot {
 			log.severe("Failed to run launcher jar!");
 			e.printStackTrace();
 		}
-		
-		
-		//com.skcraft.launcher.Launcher
-		
 	}
 	
 	/**
 	 * Attempts to run a given LauncherJar
 	 * 
-	 * @param jar the LauncherJar to run
+	 * @param jar the LauncherJar to run (must not be packed!)
 	 * @throws ClassNotFoundException if the launcher jar lacks the right class
 	 * @throws SecurityException see Class.getConstructor()
 	 * @throws NoSuchMethodException see Class.getConstructor()
@@ -116,14 +127,9 @@ public class Craftboot {
 	 * Creates a reference to the directory where the launcher will be stored
 	 */
 	public static File makeDataDir() {
-		//TODO use a better directory based on OS version
-		File file = new File(System.getProperty("user.dir"));
-		// since we're using working directory, we know it exists
-		// but once we're not using working directory, be sure to mkdir if needed!
-		return file;
-		/*String os = System.getProperty("os.name");
-		if (os.contains("Windows")) {
-			dataDir = new File();
-		}*/
+		File homeDir = new File(System.getProperty("user.home"));
+		File dir = new File(homeDir, LAUNCHER_SUBDIR);
+		dir.mkdirs();
+		return dir;
 	}
 }

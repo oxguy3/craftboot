@@ -12,12 +12,16 @@ import java.util.jar.Pack200;
 
 import lombok.Getter;
 
+/**
+ * Represents a .jar file containing a version of the launcher (may also
+ * represent a .jar.pack file)
+ */
 public class LauncherJar {
-
-	final static String PACKED_EXT = ".jar.pack";
-	final static String UNPACKED_EXT = ".jar";
 	
+	// the file referencing the jar's location
 	@Getter private File file;
+	
+	// whether or not the jar is packed
 	@Getter private boolean isPacked;
 	
 	private LauncherJar (File f, boolean ip) {
@@ -33,9 +37,9 @@ public class LauncherJar {
 	public long getFileName() {
 		String name = file.getName();
 		if (this.isPacked()) {
-			name = name.substring(0, name.length() - PACKED_EXT.length());
+			name = name.substring(0, name.length() - Craftboot.PACKED_EXT.length());
 		} else {
-			name = name.substring(0, name.length() - UNPACKED_EXT.length());
+			name = name.substring(0, name.length() - Craftboot.UNPACKED_EXT.length());
 		}
 		return Long.parseLong(name);
 	}
@@ -52,8 +56,8 @@ public class LauncherJar {
 		
 		Pack200.Unpacker unpacker = Pack200.newUnpacker();
 		String newFileName = file.getName();
-		newFileName = newFileName.substring(0, newFileName.length() - PACKED_EXT.length())
-				+ UNPACKED_EXT;
+		newFileName = newFileName.substring(0, newFileName.length() - Craftboot.PACKED_EXT.length())
+				+ Craftboot.UNPACKED_EXT;
 		File unpackedFile = new File(file.getParentFile(), newFileName);
 
 		FileInputStream fis;
@@ -101,13 +105,13 @@ public class LauncherJar {
 		boolean packed;
 		
 		// check that the file extension is correct, then remove it
-		if (name.endsWith(PACKED_EXT)) {
+		if (name.endsWith(Craftboot.PACKED_EXT)) {
 			packed = true;
-			name = name.substring(0, name.length() - PACKED_EXT.length());
+			name = name.substring(0, name.length() - Craftboot.PACKED_EXT.length());
 			
-		} else if (name.endsWith(UNPACKED_EXT)) {
+		} else if (name.endsWith(Craftboot.UNPACKED_EXT)) {
 			packed = false;
-			name = name.substring(0, name.length() - UNPACKED_EXT.length());
+			name = name.substring(0, name.length() - Craftboot.UNPACKED_EXT.length());
 			
 		} else {
 			return null;
