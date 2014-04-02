@@ -9,7 +9,7 @@ Need some help? Check out the [wiki](//github.com/oxguy3/craftboot/wiki) for hel
 
 ## Credits
 
-Enormous thanks to sk89q for all his work creating SKCraft Launcher! And of course, thanks to Mojang and 
+Enormous thanks to sk89q for all his work creating SKCraft Launcher! And of course, thanks to Mojang and anyone else who has made Minecraft what it is.
 
 
 ## License
