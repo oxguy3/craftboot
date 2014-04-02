@@ -37,9 +37,9 @@ public class LauncherJar {
 	public long getFileName() {
 		String name = file.getName();
 		if (this.isPacked()) {
-			name = name.substring(0, name.length() - Craftboot.PACKED_EXT.length());
+			name = name.substring(0, name.length() - CraftbootUtils.PACKED_EXT.length());
 		} else {
-			name = name.substring(0, name.length() - Craftboot.UNPACKED_EXT.length());
+			name = name.substring(0, name.length() - CraftbootUtils.UNPACKED_EXT.length());
 		}
 		return Long.parseLong(name);
 	}
@@ -56,8 +56,8 @@ public class LauncherJar {
 		
 		Pack200.Unpacker unpacker = Pack200.newUnpacker();
 		String newFileName = file.getName();
-		newFileName = newFileName.substring(0, newFileName.length() - Craftboot.PACKED_EXT.length())
-				+ Craftboot.UNPACKED_EXT;
+		newFileName = newFileName.substring(0, newFileName.length() - CraftbootUtils.PACKED_EXT.length())
+				+ CraftbootUtils.UNPACKED_EXT;
 		File unpackedFile = new File(file.getParentFile(), newFileName);
 
 		FileInputStream fis;
@@ -105,13 +105,13 @@ public class LauncherJar {
 		boolean packed;
 		
 		// check that the file extension is correct, then remove it
-		if (name.endsWith(Craftboot.PACKED_EXT)) {
+		if (name.endsWith(CraftbootUtils.PACKED_EXT)) {
 			packed = true;
-			name = name.substring(0, name.length() - Craftboot.PACKED_EXT.length());
+			name = name.substring(0, name.length() - CraftbootUtils.PACKED_EXT.length());
 			
-		} else if (name.endsWith(Craftboot.UNPACKED_EXT)) {
+		} else if (name.endsWith(CraftbootUtils.UNPACKED_EXT)) {
 			packed = false;
-			name = name.substring(0, name.length() - Craftboot.UNPACKED_EXT.length());
+			name = name.substring(0, name.length() - CraftbootUtils.UNPACKED_EXT.length());
 			
 		} else {
 			return null;

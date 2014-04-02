@@ -1,12 +1,15 @@
 package io.github.oxguy3.craftboot;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -15,9 +18,7 @@ import lombok.extern.java.Log;
 public class Craftboot {
 	
 	@Getter private static File dataDir;
-
-	public static final String PACKED_EXT = ".jar.pack";
-	public static final String UNPACKED_EXT = ".jar";
+	
 	static final String LAUNCHER_CLASS_NAME = "com.skcraft.launcher.Launcher";
 	static final String LAUNCHER_SUBDIR = ".craftboot";
 	
@@ -29,13 +30,10 @@ public class Craftboot {
 	public static void main(String[] args) {
 		dataDir = makeDataDir();
 		File launcherDir = new File(dataDir, "launcher");
-		
-		if (!launcherDir.exists()) {
-			launcherDir.mkdir();
-		}
+		launcherDir.mkdir();
 		
 		File[] launcherPacks = launcherDir.listFiles();
-		if (launcherPacks.length == 0) {
+		if (launcherPacks == null || launcherPacks.length == 0) {
 			boolean didDownload = new LauncherDownloader().downloadLauncher();
 			if (!didDownload) {
 				log.severe("Failed to download launcher! Shutting down...");
@@ -79,6 +77,8 @@ public class Craftboot {
 			}
 		}
 		
+		prepareUserUrl();
+		
 		try {
 			runLauncherJar(newestPackFile);
 		} catch (Exception e) {
@@ -118,18 +118,52 @@ public class Craftboot {
 				"--dir", dataDir.getAbsolutePath(),
 				"--bootstrap-version", "1"
 				};
-		log.info(args.getClass().getName());
 		
 		launcherMethod.invoke(null, new Object[]{ args });
 	}
 	
 	/**
+	 * Asks the user for the URL to their launcher properties file
+	 * or uses the pre-existing properties file
+	 */
+	public static void prepareUserUrl() {
+		File launcherProperties = new File(dataDir, "launcher.properties");
+		if (!launcherProperties.exists()) {
+			String propertiesUrl = JOptionPane.showInputDialog("Please enter the launcher configuration URL.\n(Seen this message before? Make sure you haven't renamed your launcher file.)");
+			if (propertiesUrl == null) {
+				log.info("User canceled setup, shutting down...");
+				System.exit(0);
+				return;
+			}
+			if (!CraftbootUtils.downloadToFile(propertiesUrl, launcherProperties)) {
+				log.warning("Failed to download launcher.properties, default version will likely be used");
+			}
+		}
+		if (launcherProperties.exists()) {
+			try {
+				System.setProperty("com.skcraft.launcher.propertiesFile", launcherProperties.getCanonicalPath());
+			} catch (IOException e) {
+				log.warning("Failed to set system property for launcher.properties, default version will likely be used");
+				System.setProperty("com.skcraft.launcher.propertiesFile", null);
+				e.printStackTrace();
+			}
+		} else {
+			System.setProperty("com.skcraft.launcher.propertiesFile", null);
+		}
+	}
+	
+	
+	/**
 	 * Creates a reference to the directory where the launcher will be stored
+	 * 
+	 * Directory should be <user home folder>/<LAUNCHER_SUBDIR>/<name of craftboot jar file>
 	 */
 	public static File makeDataDir() {
 		File homeDir = new File(System.getProperty("user.home"));
-		File dir = new File(homeDir, LAUNCHER_SUBDIR);
-		dir.mkdirs();
-		return dir;
+		File craftbootDir = new File(homeDir, LAUNCHER_SUBDIR);
+		String launcherFilename = new File(Craftboot.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getName();
+		File instanceDir = new File(craftbootDir, launcherFilename);
+		instanceDir.mkdirs();
+		return instanceDir;
 	}
 }
