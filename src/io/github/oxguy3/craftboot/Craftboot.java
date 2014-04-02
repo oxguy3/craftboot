@@ -13,6 +13,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -24,6 +26,8 @@ public class Craftboot {
 	
 	static final String LAUNCHER_CLASS_NAME = "com.skcraft.launcher.Launcher";
 	static final String LAUNCHER_SUBDIR = ".craftboot";
+	static final String URL_DIALOG_TEXT = "Welcome to CraftBoot! Please enter a launcher configuration URL."
+			+ "\n(if you already completed this previously, make sure that you didn't rename your launcher)";
 	
 	/**
 	 * Does most of the everything
@@ -31,6 +35,7 @@ public class Craftboot {
 	 * @param args arguments (not used)
 	 */
 	public static void main(String[] args) {
+		setLookAndFeel();
 		dataDir = makeDataDir();
 		File launcherDir = new File(dataDir, "launcher");
 		launcherDir.mkdir();
@@ -102,7 +107,9 @@ public class Craftboot {
 	 * @throws IllegalAccessException  see Constructor.newInstance()
 	 * @throws InstantiationException  see Constructor.newInstance()
 	 */
-	public static void runLauncherJar(LauncherJar jar) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static void runLauncherJar(LauncherJar jar) throws ClassNotFoundException,
+	NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
+	IllegalArgumentException, InvocationTargetException {
 		
 		URL[] jarUrls = new URL[1];
 		try {
@@ -147,7 +154,8 @@ public class Craftboot {
 		if (!launcherProperties.exists() || propertiesUrl == null) {
 			propertiesUrl = (propertiesUrl == null) ? "" : propertiesUrl;
 			while (propertiesUrl == "") {
-				propertiesUrl = JOptionPane.showInputDialog("Please enter the launcher configuration URL.\n(Seen this message before? Make sure you haven't renamed your launcher file.)");
+				
+				propertiesUrl = JOptionPane.showInputDialog(URL_DIALOG_TEXT);
 			}
 			if (propertiesUrl == null) {
 				log.info("User canceled setup, shutting down...");
@@ -158,7 +166,7 @@ public class Craftboot {
 			// save the url to a file
 			PrintStream out;
 			try {
-				out = new PrintStream(new FileOutputStream(new File(dataDir, "craftbooturl")));
+				out = new PrintStream(new FileOutputStream(craftbootUrl));
 				out.print(propertiesUrl);
 				out.close();
 			} catch (FileNotFoundException e) {
@@ -196,5 +204,22 @@ public class Craftboot {
 		File instanceDir = new File(craftbootDir, launcherFilename);
 		instanceDir.mkdirs();
 		return instanceDir;
+	}
+	
+	/**
+	 * Sets the javax.swing L&F to the system's native style
+	 */
+	public static void setLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 }

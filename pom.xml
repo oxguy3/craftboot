@@ -2,21 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.oxguy3</groupId>
   <artifactId>craftboot</artifactId>
-  <version>1.0.0</version>
-  <name>Craftboot</name>
+  <version>1.0.1</version>
+  <name>CraftBoot</name>
   <description>An open bootstrapper for a Minecraft modpack launcher, built on SKCraft Launcher</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
-    <!--<plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.0</version>
-        <configuration>
-          <source/>
-          <target/>
-        </configuration>
-      </plugin>
-    </plugins>-->
         <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
