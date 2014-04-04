@@ -4,7 +4,7 @@
 
 CraftBoot is a bootstrapper for [SKCraft Launcher](https://github.com/skcraft/launcher), an open source launcher for Minecraft modpacks. CraftBoot allows modpack makers to easily distribute updates for their modpacks using the powerful tools provided by SKCraft Launcher, but without having to know Java or open an IDE.
 
-Need some help? Check out the [wiki](//github.com/oxguy3/craftboot/wiki) to get started. If you find a bug or have a suggestion, feel free to [open a new issue](//github.com/oxguy3/craftboot/issues) or [send me a tweet](//twitter.com/NyanAttack). You might also look at these threads on [Minecraft Forums](http://www.minecraftforum.net/topic/2532463-), though I might not see any comments posted in those places very quickly.
+Need some help? Check out the [wiki](//github.com/oxguy3/craftboot/wiki) to get started. If you find a bug or have a suggestion, feel free to [open a new issue](//github.com/oxguy3/craftboot/issues) or [send me a tweet](//twitter.com/NyanAttack). You might also look at the thread on [Minecraft Forums](http://www.minecraftforum.net/topic/2532463-), though I might not see any comments posted there very quickly.
 
 
 ## Credits
