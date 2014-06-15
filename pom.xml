@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.oxguy3</groupId>
   <artifactId>craftboot</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>CraftBoot</name>
   <description>An open bootstrapper for a Minecraft modpack launcher, built on SKCraft Launcher</description>
   <build>

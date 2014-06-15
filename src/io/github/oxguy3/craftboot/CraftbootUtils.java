@@ -114,4 +114,22 @@ public class CraftbootUtils {
 	    }
 	    return true;
 	}
+	
+	/**
+	 * Gets the user's home directory in their OS
+	 * 
+	 * Usually this will be equivalent to the system property user.home, but
+	 * because Windows is such a special snowflake, it will return the
+	 * USERPROFILE environment variable on Windows systems.
+	 */
+	public static String getUserHome() {
+		
+		boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+		
+		if (isWindows) {
+			return System.getenv("USERPROFILE");
+		} else {
+			return System.getProperty("user.home");
+		}
+	}
 }

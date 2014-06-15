@@ -216,7 +216,7 @@ public class Craftboot {
 	 * Directory should be <user home folder>/<LAUNCHER_SUBDIR>/<name of craftboot jar file>
 	 */
 	public static File makeDataDir() {
-		File homeDir = new File(System.getProperty("user.home"));
+		File homeDir = new File(CraftbootUtils.getUserHome());
 		File craftbootDir = new File(homeDir, LAUNCHER_SUBDIR);
 		String launcherFilename = new File(Craftboot.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getName();
 		File instanceDir = new File(craftbootDir, launcherFilename);
