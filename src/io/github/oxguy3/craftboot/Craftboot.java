@@ -45,6 +45,7 @@ public class Craftboot {
 	static final String LAUNCHER_CLASS_NAME = "com.skcraft.launcher.Launcher";
 	static final String LAUNCHER_SUBDIR = ".craftboot";
 	static final String URL_DIALOG_TEXT = "Welcome to CraftBoot! Please enter a launcher configuration URL."
+			+ "\nOnly enter URLs from sources you trust, as malicious URLs could be used for phishing."
 			+ "\n(if you already completed this previously, make sure that you didn't rename your launcher)";
 	
 	/**
