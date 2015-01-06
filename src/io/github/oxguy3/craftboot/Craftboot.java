@@ -23,6 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -159,6 +162,23 @@ public class Craftboot {
 		File launcherProperties = new File(dataDir, "launcher.properties");
 		File craftbootUrl = new File(dataDir, ".craftbooturl");
 		String propertiesUrl = "";
+
+    // If there is a .craftbooturl file in the jar, copy it out to the data directory first
+    URL resourceUrl = Craftboot.class.getClassLoader().getResource(".craftbooturl");
+    if (resourceUrl != null) {
+      InputStream resInStream = Craftboot.class.getClassLoader().getResourceAsStream(".craftbooturl");
+      try {
+        OutputStream resOutStream = new FileOutputStream(craftbootUrl);
+        int readBytes;
+        byte[] buffer = new byte[4096];
+        while ((readBytes = resInStream.read(buffer)) > 0) {
+          resOutStream.write(buffer, 0, readBytes);
+        }
+        resOutStream.close();
+      } catch (Exception e) {
+        log.warning("Unable to copy .craftbooturl from jar file");
+      }
+    }
 		
 		// get the properties URL from the file if it exists
 		if (craftbootUrl.exists()) {
